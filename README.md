@@ -1,33 +1,43 @@
-# Learnly
+# Learnly — LMS Platform
 
-AI-powered learning platform built with React + Vite.
+A full-featured Learning Management System with sequential video-based courses, progress tracking, and role-based access.
 
-## Setup
+## Tech Stack
 
-```bash
-npm install
-cp .env.example .env.local
-# Add your HuggingFace token to .env.local
-npm run dev
-```
+- **React 18** + **Vite**
+- No external UI libraries — fully custom CSS
 
-## Environment Variables
+## Features
 
-| Variable | Description |
-|---|---|
-| `VITE_HF_TOKEN` | HuggingFace API token for AI Tutor & Quiz features. Get one free at [huggingface.co/settings/tokens](https://huggingface.co/settings/tokens) |
-
-## Deploy to Vercel
-
-1. Push to GitHub
-2. Import repo in Vercel
-3. Add `VITE_HF_TOKEN` in Vercel → Settings → Environment Variables
-4. Deploy
+- 🏠 Marketing homepage with course catalog, testimonials, how-it-works
+- 🔐 Auth system — login, register, roles (student / instructor / admin)
+- 📚 Course catalog with category filters
+- 🎬 Sequential learning — lessons lock until previous is complete
+- 📊 Progress tracking — per-lesson and per-course
+- 👤 Profile dashboard with stats
+- ⚙️ Admin panel — user and course management
 
 ## Demo Accounts
 
-| Email | Password | Role |
-|---|---|---|
-| alex@demo.com | demo123 | Student |
-| elena@demo.com | demo123 | Instructor |
-| admin@demo.com | admin123 | Admin |
+| Role | Email | Password |
+|------|-------|----------|
+| Student | alex@demo.com | demo123 |
+| Instructor | elena@demo.com | demo123 |
+| Admin | admin@demo.com | admin123 |
+
+## Local Development
+
+```bash
+npm install
+npm run dev
+```
+
+## Deploy to Vercel
+
+```bash
+npm run build
+```
+
+Or connect the GitHub repo to Vercel — it will auto-detect Vite and deploy correctly.
+
+> The `vercel.json` file handles SPA routing so page refreshes don't return 404.
