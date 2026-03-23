@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 /* ─── DATA ──────────────────────────────────────────────────────────────────── */
 
@@ -439,6 +439,54 @@ body{background:var(--bg);color:var(--t);font-family:var(--fn);overflow-x:hidden
 .notif{position:fixed;bottom:22px;right:22px;background:var(--bg3);border:1px solid rgba(200,245,66,.22);padding:11px 16px;font-size:11px;color:var(--t);z-index:9999;animation:nIn .3s ease;display:flex;align-items:center;gap:8px;max-width:300px}
 .notif-dot{width:5px;height:5px;background:var(--a);flex-shrink:0}
 @keyframes nIn{from{transform:translateY(12px);opacity:0}to{transform:translateY(0);opacity:1}}
+
+/* ── HF AI PANEL ── */
+.ai-tab-bar{display:flex;border-bottom:1px solid var(--bd);background:var(--bg2);flex-shrink:0}
+.ai-tab{font-size:9px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;padding:10px 14px;cursor:pointer;color:var(--t3);border-bottom:2px solid transparent;margin-bottom:-1px;background:none;border-top:none;border-left:none;border-right:none;font-family:var(--fn);transition:all .2s;display:flex;align-items:center;gap:5px}
+.ai-tab:hover{color:var(--t2)}
+.ai-tab.on{color:var(--a);border-bottom-color:var(--a)}
+.ai-tab-badge{font-size:7px;padding:1px 5px;background:rgba(200,245,66,.15);color:var(--a);border-radius:20px}
+.chat-wrap{display:flex;flex-direction:column;height:360px}
+.chat-messages{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:8px}
+.chat-msg{max-width:88%;padding:8px 11px;font-size:11px;line-height:1.6;border-radius:8px}
+.chat-msg.user{align-self:flex-end;background:rgba(200,245,66,.1);color:var(--t);border:1px solid rgba(200,245,66,.18)}
+.chat-msg.ai{align-self:flex-start;background:var(--bg3);color:var(--t2);border:1px solid var(--bd)}
+.ai-label{font-size:7px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--a);margin-bottom:4px}
+.chat-input-row{padding:9px;border-top:1px solid var(--bd);display:flex;gap:7px;background:var(--bg2)}
+.chat-input{flex:1;background:var(--bg3);border:1px solid var(--bd);padding:7px 10px;color:var(--t);font-family:var(--fn);font-size:11px;outline:none;border-radius:6px;transition:border-color .2s}
+.chat-input:focus{border-color:var(--a)}
+.chat-send{padding:7px 13px;background:var(--a);color:#0a0a0a;border:none;cursor:pointer;font-family:var(--fn);font-size:9px;font-weight:700;border-radius:6px;transition:all .15s;flex-shrink:0}
+.chat-send:hover{background:var(--a2)}
+.chat-send:disabled{opacity:.35;cursor:not-allowed}
+.quiz-wrap{padding:12px;overflow-y:auto;max-height:400px}
+.quiz-gen-btn{width:100%;padding:9px;background:rgba(200,245,66,.07);border:1px solid rgba(200,245,66,.18);color:var(--a);font-family:var(--fn);font-size:9px;font-weight:600;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:all .2s;border-radius:6px;margin-bottom:12px}
+.quiz-gen-btn:hover{background:rgba(200,245,66,.14)}
+.quiz-gen-btn:disabled{opacity:.35;cursor:not-allowed}
+.quiz-q{background:var(--bg3);border:1px solid var(--bd);border-radius:7px;padding:11px;margin-bottom:9px}
+.quiz-q-text{font-size:11px;font-weight:500;color:var(--t);margin-bottom:9px;line-height:1.5}
+.quiz-opt{width:100%;text-align:left;padding:6px 10px;border:1px solid var(--bd);background:var(--bg4);color:var(--t2);font-family:var(--fn);font-size:10px;cursor:pointer;border-radius:5px;margin-bottom:4px;transition:all .15s}
+.quiz-opt:hover:not(:disabled){border-color:var(--bd2);color:var(--t)}
+.quiz-opt.correct{background:rgba(16,185,129,.1);border-color:rgba(16,185,129,.35);color:#10b981}
+.quiz-opt.wrong{background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.25);color:var(--red)}
+.quiz-score{text-align:center;padding:14px;font-family:var(--fm);font-size:16px;color:var(--a)}
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:500;display:flex;align-items:center;justify-content:center;padding:20px}
+.modal{background:var(--bg2);border:1px solid var(--bd);border-radius:12px;padding:26px;width:100%;max-width:420px}
+.modal-title{font-family:var(--fd);font-size:22px;letter-spacing:1px;margin-bottom:5px}
+.modal-sub{font-size:11px;color:var(--t2);margin-bottom:18px;line-height:1.6}
+.modal-step{display:flex;gap:9px;margin-bottom:9px;font-size:11px;color:var(--t2);align-items:flex-start}
+.modal-step-n{width:17px;height:17px;background:rgba(200,245,66,.1);color:var(--a);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;flex-shrink:0;margin-top:1px}
+.modal-inp{width:100%;background:var(--bg3);border:1px solid var(--bd);padding:8px 11px;color:var(--t);font-family:var(--fm);font-size:11px;outline:none;border-radius:6px;margin:12px 0;transition:border-color .2s}
+.modal-inp:focus{border-color:var(--a)}
+.modal-btns{display:flex;gap:7px}
+.modal-btn-p{flex:1;padding:9px;background:var(--a);color:#0a0a0a;border:none;font-family:var(--fn);font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:6px}
+.modal-btn-p:hover{background:var(--a2)}
+.modal-btn-s{padding:9px 14px;background:none;border:1px solid var(--bd2);color:var(--t2);font-family:var(--fn);font-size:9px;cursor:pointer;border-radius:6px}
+.modal-btn-s:hover{border-color:var(--t2);color:var(--t)}
+.suggest-chips{display:flex;flex-wrap:wrap;gap:5px;padding:0 12px 9px}
+.suggest-chip{font-size:10px;padding:3px 9px;border:1px solid var(--bd2);color:var(--t3);background:none;cursor:pointer;border-radius:20px;font-family:var(--fn);transition:all .15s}
+.suggest-chip:hover{border-color:var(--a);color:var(--a)}
+.ai-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:120px;gap:7px;color:var(--t3);font-size:11px;text-align:center;padding:0 16px}
+.hf-powered{display:inline-flex;align-items:center;gap:4px;font-size:8px;padding:2px 7px;background:rgba(255,212,0,.08);color:#ffd400;border:1px solid rgba(255,212,0,.15);border-radius:20px;margin-left:6px}
 `;
 
 /* ─── ICONS ─────────────────────────────────────────────────────────────────── */
@@ -791,11 +839,221 @@ const Sidebar = ({ enrolled, activeId, onSelect, progress }) => {
   );
 };
 
+
+/* ─── HUGGING FACE HELPERS ───────────────────────────────────────────────────── */
+
+const HF_MODEL = "mistralai/Mistral-7B-Instruct-v0.3";
+
+async function hfChat(token, messages) {
+  const res = await fetch(`https://api-inference.huggingface.co/models/${HF_MODEL}/v1/chat/completions`, {
+    method: "POST",
+    headers: { "Authorization": `Bearer ${token}`, "Content-Type": "application/json" },
+    body: JSON.stringify({ model: HF_MODEL, messages, max_tokens: 512, stream: false }),
+  });
+  if (!res.ok) { const e = await res.json(); throw new Error(e.error?.message || `HF API error ${res.status}`); }
+  const data = await res.json();
+  return data.choices?.[0]?.message?.content || "No response.";
+}
+
+/* ─── HF TOKEN MODAL ─────────────────────────────────────────────────────────── */
+const HFTokenModal = ({ onSave, onClose }) => {
+  const [tok, setTok] = useState("");
+  return (
+    <div className="modal-bg" onClick={e => e.target.classList.contains("modal-bg") && onClose()}>
+      <div className="modal">
+        <div className="modal-title">Connect Hugging Face <span className="hf-powered">🤗 Free</span></div>
+        <div className="modal-sub">
+          Get a free token to unlock the AI Tutor and Quiz Generator powered by Mistral-7B.
+        </div>
+        <div>
+          {[
+            "Go to huggingface.co/settings/tokens",
+            'Click "New token" → Name it "learnly" → Role: Read',
+            "Copy the token (starts with hf_...) and paste below",
+          ].map((s,i) => (
+            <div key={i} className="modal-step">
+              <div className="modal-step-n">{i+1}</div>
+              <div>{s}</div>
+            </div>
+          ))}
+        </div>
+        <input
+          className="modal-inp"
+          placeholder="hf_xxxxxxxxxxxxxxxxxxxxxxxx"
+          value={tok}
+          onChange={e => setTok(e.target.value)}
+          onKeyDown={e => e.key === "Enter" && tok.startsWith("hf_") && onSave(tok)}
+        />
+        <div className="modal-btns">
+          <button className="modal-btn-s" onClick={onClose}>Cancel</button>
+          <button className="modal-btn-p" onClick={() => onSave(tok)} disabled={!tok.startsWith("hf_")}>
+            Save & Activate AI →
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+/* ─── AI CHAT PANEL ──────────────────────────────────────────────────────────── */
+const AIChatPanel = ({ hfToken, vid, course, onNeedToken }) => {
+  const [msgs, setMsgs] = useState([]);
+  const [input, setInput] = useState("");
+  const [loading, setLoading] = useState(false);
+  const bottomRef = useRef(null);
+
+  useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: "smooth" }); }, [msgs]);
+
+  const SUGGESTIONS = [
+    `Explain ${vid?.t?.split(" — ")[0]} simply`,
+    "Give me a real-world example",
+    "What should I learn next?",
+    "Quiz me on this topic",
+  ];
+
+  const send = async (text) => {
+    const q = text || input.trim();
+    if (!q) return;
+    if (!hfToken) { onNeedToken(); return; }
+    setInput("");
+    const userMsg = { role: "user", content: q };
+    setMsgs(prev => [...prev, { type: "user", text: q }]);
+    setLoading(true);
+    try {
+      const systemPrompt = `You are a concise, expert tutor for the course "${course.title}". The student is currently watching: "${vid?.t}". Answer in 2-4 short paragraphs max. Be clear, practical, and encouraging.`;
+      const history = msgs.slice(-6).map(m => ({ role: m.type === "user" ? "user" : "assistant", content: m.text }));
+      const reply = await hfChat(hfToken, [{ role: "system", content: systemPrompt }, ...history, userMsg]);
+      setMsgs(prev => [...prev, { type: "ai", text: reply }]);
+    } catch (err) {
+      setMsgs(prev => [...prev, { type: "ai", text: `⚠️ ${err.message}` }]);
+    }
+    setLoading(false);
+  };
+
+  return (
+    <div className="chat-wrap">
+      <div className="chat-messages">
+        {msgs.length === 0 && (
+          <div className="ai-empty">
+            <div style={{fontSize:22}}>🤖</div>
+            <div>Ask anything about <strong style={{color:"var(--t2)"}}>{vid?.t?.split(" — ")[0]}</strong></div>
+            <div style={{fontSize:10}}>Powered by Mistral-7B via Hugging Face</div>
+          </div>
+        )}
+        {msgs.map((m, i) => (
+          <div key={i} className={`chat-msg ${m.type}`}>
+            {m.type === "ai" && <div className="ai-label">AI Tutor 🤗</div>}
+            {m.text}
+          </div>
+        ))}
+        {loading && <div className="chat-msg ai" style={{opacity:.6,fontStyle:"italic"}}>Thinking...</div>}
+        <div ref={bottomRef}/>
+      </div>
+      {msgs.length === 0 && (
+        <div className="suggest-chips">
+          {SUGGESTIONS.map((s,i) => (
+            <button key={i} className="suggest-chip" onClick={() => send(s)}>{s}</button>
+          ))}
+        </div>
+      )}
+      <div className="chat-input-row">
+        <input
+          className="chat-input"
+          placeholder={hfToken ? "Ask about this lesson..." : "Add HF token to chat..."}
+          value={input}
+          onChange={e => setInput(e.target.value)}
+          onKeyDown={e => e.key === "Enter" && !loading && send()}
+        />
+        <button className="chat-send" onClick={() => send()} disabled={loading || !input.trim()}>Send</button>
+      </div>
+    </div>
+  );
+};
+
+/* ─── QUIZ PANEL ─────────────────────────────────────────────────────────────── */
+const QuizPanel = ({ hfToken, vid, course, onNeedToken }) => {
+  const [questions, setQuestions] = useState([]);
+  const [answers, setAnswers] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [score, setScore] = useState(null);
+
+  const generate = async () => {
+    if (!hfToken) { onNeedToken(); return; }
+    setLoading(true); setQuestions([]); setAnswers({}); setScore(null);
+    try {
+      const prompt = `Generate exactly 4 multiple-choice quiz questions about "${vid?.t?.split(" — ")[0]}" in the context of "${course.title}".
+
+Return ONLY valid JSON (no markdown, no explanation) in this exact format:
+[{"q":"Question text?","opts":["A) option","B) option","C) option","D) option"],"ans":"A) correct option"}]`;
+      const raw = await hfChat(hfToken, [
+        { role: "system", content: "You are a quiz generator. Return only valid JSON arrays, no markdown, no extra text." },
+        { role: "user", content: prompt },
+      ]);
+      const jsonStr = raw.match(/\[[\s\S]*\]/)?.[0];
+      if (!jsonStr) throw new Error("Could not parse quiz JSON");
+      const parsed = JSON.parse(jsonStr);
+      setQuestions(parsed.slice(0,4));
+    } catch (err) {
+      setQuestions([{ q: `⚠️ ${err.message}`, opts: [], ans: "" }]);
+    }
+    setLoading(false);
+  };
+
+  const answer = (qi, opt) => {
+    if (answers[qi] !== undefined) return;
+    const newA = { ...answers, [qi]: opt };
+    setAnswers(newA);
+    if (Object.keys(newA).length === questions.length) {
+      const correct = questions.filter((q,i) => newA[i] === q.ans).length;
+      setScore(correct);
+    }
+  };
+
+  return (
+    <div className="quiz-wrap">
+      <button className="quiz-gen-btn" onClick={generate} disabled={loading}>
+        {loading ? "⏳ Generating Quiz..." : `✦ Generate Quiz for "${vid?.t?.split(" — ")[0]?.slice(0,28)}..."`}
+      </button>
+      {score !== null && (
+        <div className="quiz-score">
+          {score}/{questions.length} correct {score === questions.length ? "🎉 Perfect!" : score >= questions.length/2 ? "👍 Good!" : "📚 Keep studying!"}
+          <div style={{marginTop:8}}><button className="quiz-gen-btn" onClick={generate}>Try Again</button></div>
+        </div>
+      )}
+      {questions.map((q, qi) => (
+        <div key={qi} className="quiz-q">
+          <div className="quiz-q-text">{qi+1}. {q.q}</div>
+          {q.opts.map((opt, oi) => {
+            const picked = answers[qi] === opt;
+            const isCorrect = q.ans === opt;
+            const revealed = answers[qi] !== undefined;
+            return (
+              <button key={oi} className={`quiz-opt${revealed && isCorrect ? " correct" : ""}${picked && !isCorrect ? " wrong" : ""}`}
+                disabled={revealed} onClick={() => answer(qi, opt)}>
+                {opt}
+              </button>
+            );
+          })}
+        </div>
+      ))}
+      {questions.length === 0 && !loading && (
+        <div className="ai-empty">
+          <div style={{fontSize:20}}>📝</div>
+          <div>Generate an AI quiz for the current lesson</div>
+          <div style={{fontSize:10}}>Powered by Mistral-7B via Hugging Face</div>
+        </div>
+      )}
+    </div>
+  );
+};
+
 /* ─── LEARNING PAGE ──────────────────────────────────────────────────────────── */
-const LearnPage = ({ course, progress, onProgress, notify }) => {
+const LearnPage = ({ course, progress, onProgress, notify, hfToken, onNeedToken }) => {
   const allVids = course.secs.flatMap(s => s.vids);
   const [activeId, setActiveId] = useState(allVids[0]?.id);
   const [done, setDone] = useState(new Set(progress[course.id] || []));
+  const [aiTab, setAiTab] = useState("chat");
+  const [showTokenModal, setShowTokenModal] = useState(false);
 
   // Reset when course changes
   useEffect(() => {
@@ -921,11 +1179,33 @@ const LearnPage = ({ course, progress, onProgress, notify }) => {
                   {next?.t || "Course Complete"} →
                 </button>
               </div>
+
+              {/* ── HF AI PANEL ── */}
+              <div style={{marginTop:20,border:"1px solid var(--bd)",borderRadius:8,overflow:"hidden"}}>
+                <div className="ai-tab-bar">
+                  <button className={`ai-tab ${aiTab==="chat"?"on":""}`} onClick={()=>setAiTab("chat")}>
+                    🤖 AI Tutor
+                    {!hfToken && <span className="ai-tab-badge">Setup</span>}
+                  </button>
+                  <button className={`ai-tab ${aiTab==="quiz"?"on":""}`} onClick={()=>setAiTab("quiz")}>
+                    📝 Quiz Me
+                    {!hfToken && <span className="ai-tab-badge">Setup</span>}
+                  </button>
+                  <div style={{flex:1}}/>
+                  {hfToken
+                    ? <div style={{display:"flex",alignItems:"center",padding:"0 12px",fontSize:9,color:"var(--a)"}}>🤗 HF Connected</div>
+                    : <button style={{margin:"auto 10px",fontSize:9,padding:"4px 10px",background:"rgba(255,212,0,.1)",color:"#ffd400",border:"1px solid rgba(255,212,0,.2)",borderRadius:20,cursor:"pointer",fontFamily:"var(--fn)"}} onClick={()=>setShowTokenModal(true)}>Connect HF →</button>
+                  }
+                </div>
+                {aiTab==="chat" && <AIChatPanel hfToken={hfToken} vid={vid} course={course} onNeedToken={()=>setShowTokenModal(true)}/>}
+                {aiTab==="quiz" && <QuizPanel hfToken={hfToken} vid={vid} course={course} onNeedToken={()=>setShowTokenModal(true)}/>}
+              </div>
             </div>
           </>
         ))}
       </div>
     </div>
+    {showTokenModal && <HFTokenModal onSave={t=>{onNeedToken(t);setShowTokenModal(false);}} onClose={()=>setShowTokenModal(false)}/>}
   );
 };
 
@@ -1080,8 +1360,10 @@ export default function App() {
   const [enrolled, setEnrolled]   = useState([1]);
   const [progress, setProgress]   = useState({});
   const [notif, setNotif]         = useState(null);
+  const [hfToken, setHfToken]     = useState(localStorage.getItem('hf_token') || '');
 
   const notify = msg => setNotif(msg);
+  const saveHfToken = t => { setHfToken(t); try { localStorage.setItem('hf_token', t); } catch(e){} notify('🤗 Hugging Face AI activated!'); };
 
   const doLogin = u => {
     setUser(u);
@@ -1175,7 +1457,7 @@ export default function App() {
             <div style={{flex:1,overflowY:"auto"}}>
               {page==="home"     && <HomePage user={user} embedded={true} onGoToAuth={m=>{setAuthMode(m);setScreen("auth");}} onGoToDashboard={()=>setPage("catalog")}/>}
               {page==="catalog"  && <CatalogPage enrolled={enrolled} onEnroll={id=>setEnrolled(p=>p.includes(id)?p:[...p,id])} onOpen={openCourse} notify={notify}/>}
-              {page==="learning" && course && <LearnPage course={course} progress={progress} onProgress={(id,l)=>setProgress(p=>({...p,[id]:l}))} notify={notify}/>}
+              {page==="learning" && course && <LearnPage course={course} progress={progress} onProgress={(id,l)=>setProgress(p=>({...p,[id]:l}))} notify={notify} hfToken={hfToken} onNeedToken={t=>{if(typeof t==="string"&&t.startsWith("hf_"))saveHfToken(t);}}/>}
               {page==="profile"  && <ProfilePage user={user} enrolled={enrolled} progress={progress} onOpen={openCourse}/>}
               {page==="admin"    && <AdminPage users={users}/>}
             </div>
